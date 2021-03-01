@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据生成</title>
+    <link href="../../static/extern/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="../../static/extern/upload/style.css" type="text/css" rel="stylesheet">
+    <link href="../../static/style/main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="app" class="background">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <ul class="nav navbar-nav navbar-left">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">文件<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-toggle="modal" data-target="#open">打开</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">导出</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid mt-20">
+        <div class="row">
+            <div class="col-md-8">
+                <div id="content" class="input-container">
+                    <form>
+                        <div class="form-group">
+                            <label for="input" class="control-label">输入内容：</label>
+                            <textarea v-model="input" id="input" class="form-control" rows="10"></textarea>
+                        </div>
+                        <div class="form-group text-center">
+                            <div @click="request('get')" class="btn btn-default">提交</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="output" class="control-label">改错内容：</label>
+                            <textarea v-model="output.replace" id="output" class="form-control" rows="10"></textarea>
+                        </div>
+                    </form>
+                    <div class="content-list">
+                        <div class="content-item">
+                            <div class="label-item" v-for="item in output.info">
+                                <div class="label-char" v-text="item.src_char"
+                                     :style="{'color': item.labelColor}"></div>
+                                <div class="label-label" v-text="item.tgt_char"
+                                     :style="{'color': item.labelColor}"></div>
+                                <div class="label-index" v-text="item.index"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="content-list">
+                    <div class="h4">历史记录</div>
+                    <div class="list-group history-list" v-for="item in history">
+                        <div @click="input=item" class="list-group-item" v-text="item"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="open" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">消息框</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="upload" method="post" action="upload.php" enctype="multipart/form-data">
+                        <div id="drop">
+                            Drop Here
+                            <a>Browse</a>
+                            <input type="file" name="upl" multiple/>
+                        </div>
+                        <ul></ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <transition name="fade">
+        <div v-if="alert.isShow" class="alert" :class="alert.type" role="alert" v-text="alert.message"></div>
+    </transition>
+
+</div>
+
+<script src="../../static/script/jquery.min.js"></script>
+<script src="../../static/extern/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="../../static/script/vue.js"></script>
+<script src="../../static/extern/upload/jquery.knob.js"></script>
+<script src="../../static/extern/upload/jquery.ui.widget.js"></script>
+<script src="../../static/extern/upload/jquery.iframe-transport.js"></script>
+<script src="../../static/extern/upload/jquery.fileupload.js"></script>
+<script src="../../static/script/data_generate.js"></script>
+</body>
+</html>

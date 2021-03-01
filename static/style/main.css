@@ -1,0 +1,263 @@
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("/static/images/back.jpg") center center repeat;
+}
+
+.navbar {
+    padding-right: 20px;
+    box-shadow: 0 3px 5px 3px rgba(0, 0, 0, 0.3);
+}
+
+.container-fluid {
+    position: relative;
+    top: 60px;
+}
+
+.file-status {
+    display: inline-block;
+    position: relative;
+    top: 6px;
+    width: 20px;
+    height: 20px;
+    line-height: 60px;
+    border-radius: 10px;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.3);
+}
+
+.file-status-success {
+    background-color: #4cae4c;
+}
+
+.file-status-error {
+    background-color: #ff1c2b;
+}
+
+.label-panel {
+    transition: width 0.5s ease-in-out;
+}
+
+.content-list,
+.label-list {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    box-shadow: 0 3px 2px 3px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+    background-color: #fff;
+}
+
+.content-list:hover {
+    box-shadow: 2px 7px 5px 7px rgba(0, 0, 0, 0.7);
+}
+
+.content-list .h3 {
+    margin-top: 0 !important;
+}
+
+.label-list {
+    padding: 10px;
+}
+
+.content-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.label-item {
+    display: flex;
+    flex-direction: column;
+    width: 30px;
+    text-align: center;
+}
+
+.label-char,
+.label-label,
+.label-index {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+}
+
+.label-index {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #333;
+    color: white;
+}
+
+.label-single-item {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 5px 5px 15px;
+}
+
+.func-bar {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+}
+
+.func-bar .glyphicon {
+    font-size: 32px;
+    cursor: pointer;
+}
+
+
+/* view.html 右侧快速链接 */
+
+.right-sidebar {
+    position: fixed;
+    top: 15%;
+    right: 1%;
+    width: 200px;
+    height: auto;
+    box-shadow: 2px 3px 5px 3px rgba(0, 0, 0, 0.5);
+}
+
+.alert-my {
+    position: fixed;
+    top: 50px;
+    right: 0;
+    width: auto;
+    z-index: 1000;
+}
+
+
+.container-vote {
+    position: fixed;
+    bottom: 75px;
+    left: 50%;
+    width: 600px;
+    height: 50px;
+    background-color: #f8f8f8;
+    border-color: #e7e7e7;
+    margin-left: -300px;
+    border-radius: 5px 5px 0 0;
+    z-index: 1000;
+    box-shadow: 0 3px 5px 3px rgba(0, 0, 0, 0.3);
+}
+
+.convergence {
+    position: fixed;
+    bottom: 65px;
+    left: 50%;
+    width: 600px;
+    height: 10px;
+    background-color: #f8f8f8;
+    border: none;
+    margin-left: -300px;
+    z-index: 1001;
+}
+
+/* 功能容器 */
+
+.container-func {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    display: flex;
+    flex-direction: row;
+    width: 900px;
+    height: 50px;
+    background-color: #f8f8f8;
+    border-color: #e7e7e7;
+    margin-left: -450px;
+    border-radius: 5px;
+    box-shadow: 0 3px 5px 3px rgba(0, 0, 0, 0.3);
+}
+
+
+/* 数据生成页面 */
+.input-container {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    box-shadow: 0 3px 2px 3px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+    background-color: #fff;
+}
+
+.input-container textarea {
+    resize: none;
+}
+
+.input-container .content-list {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: None;
+}
+
+.input-container .content-list:hover {
+    box-shadow: None;
+}
+
+.history-list .list-group-item {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+
+.ml-10 {
+    margin-left: 10px !important;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-20 {
+    margin-top: 20px !important;
+}
+
+.mt-50 {
+    margin-top: 50px !important;
+}
+
+.mr-5 {
+    margin-right: 5px !important;
+}
+
+.mr-20 {
+    margin-right: 20px !important;
+}
+
+.mr-100 {
+    margin-right: 100px !important;
+}
+
+.wd-100 {
+    width: 100px !important;
+}
+
+.wd-80-percent {
+    width: 80% !important;
+}
+
+.wd-100-percent {
+    width: 100% !important;
+}
+
+.float-right {
+    float: right;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.white-space {
+    height: 200px;
+}

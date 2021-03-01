@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>序列比较</title>
+    <link href="../../static/extern/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="../../static/style/main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group mr-20">
+                <label for="filename" class="hidden"></label>
+                <input type="text" v-model="input.filename" id="filename" placeholder="打开文件名称" class="form-control"/>
+            </div>
+            <div @click="request('open')" class="btn btn-default mr-20">打开文件</div>
+            <div class="file-status mr-100" :class="'file-status-' + file.status"></div>
+        </form>
+        <transition name="fade">
+            <form v-if="file.isExisted" class="navbar-form navbar-right">
+                <div v-if="!isJudge" @click="enterJudgeModel" class="btn btn-default">进入评分模式</div>
+                <div v-else @click="popup('leaveVoteModal')" class="btn btn-default">退出评分模式</div>
+            </form>
+        </transition>
+    </nav>
+
+    <div class="container-fluid">
+        <!-- 比较模式 -->
+        <div v-if="isJudge===false">
+            <div class="row mt-20" v-for="(item, index) in labelList" :key="index">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="content-list">
+                        <div class="content-item">
+                            <div class="label-item" v-for="viewItem in item.view">
+                                <div class="label-char" v-text="viewItem.char"
+                                     :style="{'color': viewItem.first.color}"></div>
+                                <div class="label-label" v-text="viewItem.first.label"
+                                     :style="{'color': viewItem.first.color}"></div>
+                                <div class="label-char" v-text="viewItem.char"
+                                     :style="{'color': viewItem.second.color}"></div>
+                                <div class="label-label" v-text="viewItem.second.label"
+                                     :style="{'color': viewItem.second.color}"></div>
+                                <div class="label-index" v-text="viewItem.text"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+        </div>
+        <!-- 评分模式 -->
+        <div v-else>
+            <div class="row mt-20" v-for="(item, index) in labelList" :key="index">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="content-list">
+                        <div class="content-item">
+                            <div class="label-item" v-for="viewItem in item.view">
+                                <div class="label-char" v-text="viewItem.char"
+                                     :style="{'color': viewItem.first.color}"></div>
+                                <div class="label-label" v-text="viewItem.first.label"
+                                     :style="{'color': viewItem.first.color}"></div>
+                                <div class="label-char" v-text="viewItem.char"
+                                     :style="{'color': viewItem.second.color}"></div>
+                                <div class="label-label" v-text="viewItem.second.label"
+                                     :style="{'color': viewItem.second.color}"></div>
+                                <div class="label-index" v-text="viewItem.text"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+                <div class="col-md-4 col-md-offset-1">
+                    <div class="content-list">
+                        <div class="h3 text-center">First 独占</div>
+                        <div class="list-group" v-for="singleItem in item.first.single">
+                            <div class="list-group-item" v-text="singleItem"></div>
+                        </div>
+                        <div class="list-group" v-for="paraItem in item.first.para">
+                            <div class="list-group-item" v-text="paraItem"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-md-offset-2">
+                    <div class="content-list">
+                        <div class="h3 text-center">Second 独占</div>
+                        <div class="list-group" v-for="singleItem in item.second.single">
+                            <div class="list-group-item" v-text="singleItem"></div>
+                        </div>
+                        <div class="list-group" v-for="paraItem in item.second.para">
+                            <div class="list-group-item" v-text="paraItem"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="white-space"></div>
+    </div>
+
+    <div v-if="isJudge" class="container-vote">
+        <div class="navbar-form">
+            <div @click="vote('left')" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left mr-5"></i>左侧</div>
+            <div @click="vote('mid')" class="btn btn-default"><i class="glyphicon glyphicon-hourglass mr-5"></i>弃权</div>
+            <div @click="vote('right')" class="btn btn-default"><i class="glyphicon glyphicon-chevron-right mr-5"></i>右侧</div>
+            <div class="form-group ml-10 mr-20">
+                <label class="control-label mr-5">
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                    <span v-text="judgeInfo.leftCount"></span>
+                </label>
+                <label class="control-label mr-5">
+                    <i class="glyphicon glyphicon-hourglass"></i>
+                    <span v-text="judgeInfo.midCount"></span>
+                </label>
+                <label class="control-label mr-5">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    <span v-text="judgeInfo.rightCount"></span>
+                </label>
+            </div>
+            <div v-if="judgeInfo.queue.length === 0" class="btn btn-default" disabled><i class="glyphicon glyphicon-repeat mr-5"></i>撤销</div>
+            <div v-else @click="voteBack" class="btn btn-default"><i class="glyphicon glyphicon-repeat mr-5"></i>撤销</div>
+            <div @click="voteFinish" class="btn btn-default">完成</div>
+        </div>
+    </div>
+    <div v-if="isJudge" class="convergence"></div>
+    <div class="container-func">
+        <div class="navbar-form">
+            <div class="form-group mr-20">
+                <label for="start" class="control-label">start：</label>
+                <input type="number" v-model="input.start" id="start" placeholder="0"
+                       class="form-control wd-100 text-center"/>
+            </div>
+            <div v-if="isJudge" class="form-group mr-20">
+                <label for="limit" class="control-label">limit：</label>
+                <input type="number" v-model="input.limit" id="limit" placeholder="1"
+                       class="form-control wd-100 text-center" disabled/>
+            </div>
+            <div v-else class="form-group mr-20">
+                <label for="limit" class="control-label">limit：</label>
+                <input type="number" v-model="input.limit" id="limit" placeholder="10"
+                       class="form-control wd-100 text-center"/>
+            </div>
+            <div class="form-group mr-20">
+                <label for="number" class="control-label">数据量：</label>
+                <input type="number" v-model="input.total" id="number" disabled
+                       class="form-control wd-100 text-center"/>
+            </div>
+            <div v-if="isJudge" class="btn btn-default" disabled>查询</div>
+            <div v-else @click="request('get')" class="btn btn-default">查询</div>
+            <div v-if="isJudge" class="btn btn-default" disabled>上一页</div>
+            <div v-else @click="turnPage('prev')" class="btn btn-default">上一页</div>
+            <div v-if="isJudge" class="btn btn-default" disabled>下一页</div>
+            <div v-else @click="turnPage('next')" class="btn btn-default">下一页</div>
+            <div @click="backToTop" class="btn btn-default">回到顶部</div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">消息框</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert" :class="alert.type" v-text="alert.message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="leaveVoteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">确认框</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">是否要退出评分模式？请先点击下方的<span class="color-red">完成</span>按钮</div>
+                </div>
+                <div class="modal-footer">
+                    <div @click="leaveJudgeModel" class="btn btn-danger">强制退出</div>
+                    <div class="btn btn-primary" data-dismiss="modal">取消</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="voteResultModal" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">评分结果</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="list-group">
+                                <div class="list-group-item">左侧：<span v-text="judgeInfo.leftCount"></span></div>
+                                <div class="list-group-item">弃权：<span v-text="judgeInfo.midCount"></span></div>
+                                <div class="list-group-item">右侧：<span v-text="judgeInfo.rightCount"></span></div>
+                                <div class="list-group-item">已投票数：<span v-text="Number(input.start) + 1"></span></div>
+                                <div class="list-group-item">剩余票数：<span v-text="Number(input.total) - Number(input.start) - 1"></span></div>
+                                <div class="list-group-item">总投票数：<span v-text="input.total"></span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="voteChart" style="width: 400px; height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div @click="request('outputVoteResult')" class="btn btn-default">导出</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="../../static/script/jquery.min.js"></script>
+<script src="../../static/extern/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="../../static/script/vue.js"></script>
+<script src="../../static/script/echarts.min.js"></script>
+<script src="../../static/script/compare.js"></script>
+</body>
+</html>

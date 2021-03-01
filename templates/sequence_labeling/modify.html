@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>序列标注结果查看</title>
+    <link href="../../static/extern/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="../../static/style/main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="app" class="background">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group mr-20">
+                <label for="filename" class="hidden"></label>
+                <input type="text" v-model="input.filename" id="filename" placeholder="打开文件名称" class="form-control"/>
+            </div>
+            <div @click="request('open')" class="btn btn-default mr-20">打开文件</div>
+            <div class="file-status mr-100" :class="'file-status-' + file.status"></div>
+            <div class="form-group mr-20">
+                <label for="start" class="control-label">start：</label>
+                <input type="number" v-model="input.start" id="start" placeholder="0"
+                       class="form-control wd-100 text-center"/>
+            </div>
+            <div class="form-group mr-20">
+                <label for="number" class="control-label">数据量：</label>
+                <input type="number" v-model="input.total" id="number" disabled
+                       class="form-control wd-100 text-center"/>
+            </div>
+            <div @click="request('get')" class="btn btn-default">查询</div>
+            <div @click="turnPage('prev')" class="btn btn-default">上一条</div>
+            <div @click="turnPage('next')" class="btn btn-default">下一条</div>
+            <div @click="save" class="btn btn-default">保存</div>
+            <div></div>
+        </form>
+    </nav>
+
+    <div id="content" class="container-fluid">
+        <div class="row mt-20">
+            <div class="col-md-7 col-md-offset-1">
+                <div class="content-list">
+                    <div class="content-item">
+                        <div class="label-item" v-for="viewItem in labelDict.indexList">
+                            <div class="label-char" v-text="viewItem.char"
+                                 :style="{'color': viewItem.color}"></div>
+                            <div class="label-label" v-text="viewItem.label"
+                                 :style="{'color': viewItem.color}"></div>
+                            <div class="label-index" v-text="viewItem.pos"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="label-list">
+                    <div class="label-single-item mt-10" v-for="(groupItem, groupIndex) in labelDict.entityList"
+                         :key="groupIndex">
+                        <div class="label-group-item" v-for="(entity, extractIndex) in groupItem"
+                             :key="entity.name + extractIndex">
+                            <form class="form-inline">
+                                <div class="form-group mt-10 wd-100-percent">
+                                    <label class="control-label">标注文本：</label>
+                                    <input type="text" :value="entity.name" class="form-control wd-80-percent"
+                                           data-type="text">
+                                </div>
+                                <div class="form-group mt-10 wd-100-percent">
+                                    <label class="control-label">start：</label>
+                                    <input type="number" :value="entity.start" class="form-control wd-100"
+                                           data-type="start">
+                                    <label class="control-label">end：</label>
+                                    <input type="number" :value="entity.end" class="form-control wd-100"
+                                           data-type="end">
+                                    <div @click="del_item" class="btn btn-danger mr-20 float-right"
+                                         :data-group-index="groupIndex" :data-extract-index="extractIndex">删除
+                                    </div>
+                                </div>
+                                <div class="form-group mt-10 wd-100-percent">
+                                    <label class="control-label">标注类别：</label>
+                                    <select class="form-control" data-type="labelType">
+                                        <option value="1">有错</option>
+                                    </select>
+                                </div>
+                            </form>
+                            <hr/>
+                        </div>
+                        <div class="func-bar mt-20 text-center">
+                            <i @click="add_item" class="glyphicon glyphicon-plus-sign" data-toggle="modal"
+                               :data-group-index="groupIndex"></i>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div @click="add_group" class="btn btn-success">添加分组</div>
+                    <div @click="update" class="btn btn-primary">提交修改</div>
+                </div>
+            </div>
+            <hr/>
+        </div>
+    </div>
+
+    <div id="modal" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">消息框</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert" :class="alert.type" v-text="alert.message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <transition name="fade">
+        <div v-if="alert.isShow" class="alert alert-my" :class="alert.type" role="alert" v-text="alert.message"></div>
+    </transition>
+
+</div>
+
+<script src="../../static/script/jquery.min.js"></script>
+<script src="../../static/extern/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="../../static/script/vue.js"></script>
+<script src="../../static/script/modify.js"></script>
+</body>
+</html>

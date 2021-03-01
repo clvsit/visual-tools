@@ -1,0 +1,243 @@
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("/static/images/back.jpg") center center repeat;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1100px;
+    height: 600px;
+    margin-top: -300px;
+    margin-left: -550px;
+    box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.4);
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar {
+    position: relative;
+    width: 200px;
+    height: 600px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.sidebar-logo {
+    margin-top: 40px;
+    margin-left: 60px;
+    width: 80px;
+}
+
+.sidebar-title {
+    text-align: center;
+    font-weight: 900;
+}
+
+.sidebar-menu {
+    height: 300px;
+    margin-top: 100px;
+    padding-left: 0;
+    list-style: None;
+}
+
+.sidebar-menu .active {
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+}
+
+.sidebar-menu-item {
+    height: 40px;
+    line-height: 40px;
+    padding-left: 50px;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+}
+
+.sidebar-menu-item:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
+.sidebar-menu .active:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #000;
+}
+
+.sidebar-menu-item .glyphicon {
+    font-size: 14px;
+}
+
+.sidebar-menu-item span {
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.sidebar-bottom-logo {
+    font-size: 32px;
+    color: #000;
+    margin-left: 84px;
+    cursor: pointer;
+}
+
+/* 右侧主体区域 */
+.main {
+    width: 900px;
+    height: 600px;
+    background-color: #fff;
+}
+
+.main-header {
+    width: 100%;
+    height: 60px;
+    padding: 0 20px;
+}
+
+.main-header .header-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.main-header .header-title {
+    display: flex;
+    flex-direction: row;
+    width: 300px;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 10px;
+}
+
+.main-header .header-title i {
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.main-header .header-title .title {
+    font-size: 24px;
+}
+
+.main-body {
+    padding: 20px;
+}
+
+.main-body .thumbnail {
+    cursor: pointer;
+    transition: all 0.25s linear;
+}
+
+.main-body .thumbnail img {
+    width: 256px;
+}
+
+.main-body .btn-default {
+    background-color: #000;
+    color: #fff;
+}
+
+.main-body .thumbnail:hover {
+    box-shadow: 0 3px 5px 3px rgba(0, 0, 0, 0.5);
+}
+
+.decorate {
+    position: absolute;
+    z-index: 1;
+}
+
+.decorate-sakura {
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+}
+
+.delimiter {
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+.btn-new-style {
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 3px 5px 1px rgba(0,0,0,0.5);
+    width: 100px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .25s linear;
+}
+
+.btn-new-style:hover {
+    background-color: #000;
+    color: #fff;
+    box-shadow: 0 5px 5px 2px rgba(0,0,0,0.5);
+}
+
+.line-center {
+    margin: 0 auto;
+}
+
+.mt-5 {
+    margin-top: 5px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-15 {
+    margin-top: 15px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.ml-5 {
+    margin-left: 5px;
+}
+
+.ml-10 {
+    margin-left: 10px;
+}
+
+.ml-15 {
+    margin-left: 15px;
+}
+
+.ml-20 {
+    margin-left: 20px;
+}
+
+.mr-15 {
+    margin-right: 15px !important;
+}
+
+.wd-100 {
+    width: 100px !important;
+}
+
+.wd-200 {
+    width: 200px !important;
+}
+
+.wd-300 {
+    width: 300px !important;
+}
+
+.pos-right {
+    float: right;
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
