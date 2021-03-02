@@ -234,7 +234,7 @@ new Vue({
                 data: {
                     uid: this.input.uid,
                     index: Number(this.input.start),
-                    extract: JSON.stringify(entityList)
+                    entityList: JSON.stringify(entityList)
                 },
                 success: function (resp) {
                     if (resp.code === 1) {
@@ -324,6 +324,28 @@ new Vue({
                 this.$forceUpdate();
                 this.labelDict.entityList[groupIndex] = newExtractList;
             }
+        },
+        changeRange(event) {
+            let entityIndex = $(event.target).siblings().eq(3).data("extract-index"),
+                type = event.target.dataset.type,
+                value = event.target.value,
+                start = this.labelDict.entityList[0][entityIndex].start,
+                end = this.labelDict.entityList[0][entityIndex].end,
+                newName = "";
+
+            if (type === "start") {
+                start = Number(value);
+                this.labelDict.entityList[0][entityIndex].start = start;
+            } else {
+                end = Number(value);
+                this.labelDict.entityList[0][entityIndex].end = end;
+            }
+
+            for (let i = start; i < end; i++) {
+                newName += this.labelDict.indexList[i].char;
+            }
+            this.labelDict.entityList[0][entityIndex].name = newName;
+            this.$forceUpdate();
         },
         changePageSize() {
             this.$nextTick(() => {

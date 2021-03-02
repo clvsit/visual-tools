@@ -59,14 +59,14 @@
                                 <div class="form-group mt-10 wd-100-percent">
                                     <label class="control-label">标注文本：</label>
                                     <input type="text" :value="entity.name" class="form-control wd-80-percent"
-                                           data-type="text">
+                                           data-type="text" disabled>
                                 </div>
                                 <div class="form-group mt-10 wd-100-percent">
                                     <label class="control-label">start：</label>
-                                    <input type="number" :value="entity.start" class="form-control wd-100"
+                                    <input @change="changeRange" type="number" :value="entity.start" class="form-control wd-100"
                                            data-type="start">
                                     <label class="control-label">end：</label>
-                                    <input type="number" :value="entity.end" class="form-control wd-100"
+                                    <input @change="changeRange" type="number" :value="entity.end" class="form-control wd-100"
                                            data-type="end">
                                     <div @click="del_item" class="btn btn-danger mr-20 float-right"
                                          :data-group-index="groupIndex" :data-extract-index="extractIndex">删除

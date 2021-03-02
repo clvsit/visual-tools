@@ -159,7 +159,7 @@ def update():
     if request.method == "POST":
         uid = request.form.get("uid", "")
         index = int(request.form.get("index", 0))
-        extract_list = json.loads(request.form.get("extract", []))
+        entity_list = json.loads(request.form.get("entityList", []))
 
         if uid == "":
             return {"code": 0, "msg": "获取数据列表失败！", "data": {"msg": "uid 没有传递或无效！"}}
@@ -167,7 +167,7 @@ def update():
         data_handler = dataset_dict.get(uid, [])
 
         try:
-            data_handler.update_data(index, extract_list)
+            data_handler.update_data(index, entity_list)
             feedback = {"code": 1, "msg": "更新数据成功！", "data": {}}
         except Exception as error:
             feedback = {"code": 0, "msg": "更新数据失败！", "data": {"msg": str(error)}}

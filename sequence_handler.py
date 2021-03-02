@@ -21,13 +21,13 @@ class SequenceHandler:
     def get_by_range(self, start: int, end: int):
         return self.dataset[start: end]
 
-    def update_data(self, index: int, extract_list: list):
-        for group_item in extract_list:
+    def update_data(self, index: int, entity_list: list):
+        for group_item in entity_list:
             for item in group_item:
                 item["start"] = int(item["start"])
                 item["end"] = int(item["end"])
 
-        self.dataset[index]["entity_list"] = extract_list
+        self.dataset[index]["entity_list"] = entity_list[0] if entity_list else []
 
     def save(self):
         with jsonlines.open(self.file_path, "w") as writer:
@@ -103,16 +103,13 @@ class SequenceHandler:
         type_dict, type_index = {"default": 0}, 1
         index_list = []
 
-        if len(label_list) == 0:
-            label_list = ["-"] * len(char_list)
-            show_type = 1
-
         for i, label in enumerate(label_list):
             label_type = "default"
 
             if label != "O":
                 if "-" in label:
-                    label_type = label.split("-")[-1]
+                    label_split = label.split("-")
+                    label, label_type = label_split[0], label_split[-1]
                 else:
                     label_type = "red"
 
@@ -126,20 +123,6 @@ class SequenceHandler:
                 "label": label,
                 "color": self.color_list[type_dict[label_type]]
             })
-
-        # extract_group: [[text, start, end, label_type], ...]
-        # for extract_group in extract_list:
-        #     if extract_group[0][-1] == "B1":
-        #         start, end, label_type = extract_group[1], extract_group[2], extract_group[3]
-        #
-        #         for i in range(start, end + 1):
-        #             index_list[i]["labelColor"] = "red"
-        #     else:
-        #         for extract_item in extract_group:
-        #             start, end, label_type = extract_item[1], extract_item[2], extract_item[3]
-        #
-        #             for i in range(start, end + 1):
-        #                 index_list[i]["labelColor"] = "blue"
 
         return {
             "type": show_type,
