@@ -3,6 +3,7 @@ import uuid
 import pandas as pd
 import jsonlines
 from collections import defaultdict
+from seqeval import metrics
 
 
 class SequenceHandler:
@@ -34,26 +35,71 @@ class SequenceHandler:
             for data in self.dataset:
                 writer.write(data)
 
-    def handle(self, dataset: list):
+    @staticmethod
+    def get_metrics(pred_list: list, label_list: list) -> dict:
+        """
+        获取序列标注的各项评估指标
+        :param pred_list:  list 模型预测的标签序列
+        :param label_list: list 人为标注的标签序列
+        :return: dict 包含各类评估指标的字典
+        """
+        if len(pred_list) == 0:
+            return {
+                "accuracy": 0, "precision": 0, "recall": 0, "f1": 0
+            }
+
+        return {
+            "accuracy": "{:.5f}".format(metrics.accuracy_score(label_list, pred_list)),
+            "precision": "{:.5f}".format(metrics.precision_score(label_list, pred_list)),
+            "recall": "{:.5f}".format(metrics.recall_score(label_list, pred_list)),
+            "f1": "{:.5f}".format(metrics.f1_score(label_list, pred_list))
+        }
+
+    def handle_view(self, dataset: list) -> dict:
+        """
+        序列标注查看页面的数据处理代码
+        :param dataset: list 待展示的数据列表
+        :return: dict 序列标注查看页面所需的数据格式
+        """
         belong_data_dict = defaultdict(list)
+        eval_pred_list, eval_label_list = [], []
 
         for data in dataset:
             char_list = list(data.get("text", ""))
+            pred_list = list(data.get("pred_list", []))
             label_list = list(data.get("label_list", []))
             belong_info = data.get("belong", "默认分组")
             entity_list = data.get("entity_list", [])
-            show_type = 0
 
             # 设置每个位置的字符与标记信息
             type_dict, type_index = {"default": 0}, 1
             index_list = []
 
-            for i, label in enumerate(label_list):
-                label_type = "default"
+            if len(label_list) == 0:
+                label_list = ["_"] * len(pred_list)
+            else:
+                eval_pred_list.append(pred_list)
+                eval_label_list.append(label_list)
+
+            for i, pred in enumerate(pred_list):
+                pred_type, label_type = "default", "default"
+                label = label_list[i]
+
+                if pred != "O":
+                    if "-" in pred:
+                        pred_split = pred.split("-")
+                        pred, pred_type = pred_split[0], pred_split[-1]
+                    else:
+                        pred_type = "red"
+
+                    if pred_type not in type_dict:
+                        type_dict[pred_type] = type_index
+                        type_index += 1
 
                 if label != "O":
                     if "-" in label:
-                        label_type = label.split("-")[-1]
+                        label_split = label.split("-")
+                        label, label_type = label_split[0], label_split[-1]
                     else:
                         label_type = "red"
 
@@ -64,8 +110,10 @@ class SequenceHandler:
                 index_list.append({
                     "pos": i,
                     "char": char_list[i],
+                    "pred": pred,
                     "label": label,
-                    "color": self.color_list[type_dict[label_type]]
+                    "predColor": self.color_list[type_dict[pred_type]],
+                    "labelColor": self.color_list[type_dict[label_type]]
                 })
 
             # 设置抽取实体信息
@@ -73,7 +121,10 @@ class SequenceHandler:
             new_entity_list = []
 
             for entity_group in entity_list:
-                entity_type_dict[entity_group[0].get("type", "default")].append(entity_group)
+                if type(entity_group) == dict:
+                    entity_type_dict[entity_group.get("type", "default")].append([entity_group])
+                else:
+                    entity_type_dict[entity_group[0].get("type", "default")].append(entity_group)
 
             for entity_type, entity_list in entity_type_dict.items():
                 new_entity_list.append({
@@ -82,16 +133,21 @@ class SequenceHandler:
                 })
 
             data_result_item = {
-                "type": show_type,
+                # "type": show_type,
                 "entityList": new_entity_list,
                 "indexList": index_list
             }
             belong_data_dict[belong_info].append(data_result_item)
 
-        return [{
+        data_list = [{
             "name": belong_info,
             "data": data_list
         } for belong_info, data_list in belong_data_dict.items()]
+
+        return {
+            "data": data_list,
+            "eval": self.get_metrics(eval_pred_list, eval_label_list)
+        }
 
     def handle_modify(self, data: dict):
         char_list = list(data.get("text", ""))

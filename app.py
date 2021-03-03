@@ -106,7 +106,7 @@ def get_data():
 
         data_handler = dataset_dict.get(uid, [])
         method_dict = {
-            "view": data_handler.handle,
+            "view": data_handler.handle_view,
             "modify": data_handler.handle_modify,
             "compare": data_handler.handle_compare
         }
@@ -137,7 +137,7 @@ def get_dataset_by_range():
 
         data_handler = dataset_dict.get(uid, [])
         method_dict = {
-            "view": data_handler.handle,
+            "view": data_handler.handle_view,
             "modify": data_handler.handle_modify,
             "compare": data_handler.handle_compare
         }

@@ -2,7 +2,7 @@ new Vue({
     el: "#app",
     data: {
         input: {
-            filename: "test.jsonl",
+            filename: "/nfs/users/chenxu/project/OpenNMT-tf/asr_correct/result/detect/redbook/result_food_no_label.jsonl",
             fileSelect: "",
             start: 0,
             limit: 10,
@@ -21,7 +21,16 @@ new Vue({
             isShow: true,
             labelPanelClass: "col-md-7"
         },
-        isQuickLink: false,
+        eval: {
+            accuracy: 0,
+            precision: 0,
+            recall: 0,
+            f1: 0
+        },
+        controls: {
+            isEval: false,
+            isQuickLink: false,
+        },
         labelList: [],
         requestUrl: ""
     },
@@ -29,7 +38,7 @@ new Vue({
         let _this = this;
 
         $.getJSON({
-            url: "/static/config/config_local.json",
+            url: "/static/config/config.json",
             method: "GET",
             success(resp) {
                 _this.requestUrl = resp.requestUrl;
@@ -130,6 +139,13 @@ new Vue({
                                 type: "alert-success",
                                 message: resp.msg
                             };
+                            _this.eval = {
+                                accuracy: Number(resp.data.list.eval.accuracy),
+                                precision: Number(resp.data.list.eval.precision),
+                                recall: Number(resp.data.list.eval.recall),
+                                f1: Number(resp.data.list.eval.f1),
+                            };
+                            _this.drawRadarPicture(resp.data.list.eval);
                             _this.backToTop();
                         } else {
                             _this.alert = {
@@ -177,17 +193,67 @@ new Vue({
             });
         },
         changeEntityShow(status) {
-              if (status === "open") {
-                  this.entity = {
-                      isShow: true,
-                      labelPanelClass: "col-md-7"
-                  };
-              } else {
-                  this.entity = {
-                      isShow: false,
-                      labelPanelClass: "col-md-10"
-                  };
-              }
+            if (status === "open") {
+                this.entity = {
+                    isShow: true,
+                    labelPanelClass: "col-md-7"
+                };
+            } else {
+                this.entity = {
+                    isShow: false,
+                    labelPanelClass: "col-md-10"
+                };
+            }
+        },
+        openPanel(panelType) {
+            if (panelType === "evalPanel") {
+                this.controls.isEval = true;
+                this.drawRadarPicture();
+            }
+        },
+        drawRadarPicture() {
+            let option = {
+                tooltip: {},
+                legend: {
+                    data: ['当前数据']
+                },
+                radar: {
+                    name: {
+                        textStyle: {
+                            color: '#fff',
+                            backgroundColor: '#999',
+                            borderRadius: 3,
+                            padding: [3, 5]
+                        }
+                    },
+                    indicator: [
+                        {name: 'accuracy', max: 1},
+                        {name: 'precision', max: 1},
+                        {name: 'recall', max: 1},
+                        {name: 'F1', max: 1},
+                    ]
+                },
+                series: [{
+                    name: '评估指标',
+                    type: 'radar',
+                    data: [
+                        {
+                            value: [
+                                Number(this.eval.accuracy),
+                                Number(this.eval.precision),
+                                Number(this.eval.recall),
+                                Number(this.eval.f1)
+                            ],
+                            name: '评估指标'
+                        }
+                    ]
+                }]
+            };
+
+            this.$nextTick(() => {
+                const evalEcharts = echarts.init(document.getElementById("evalChart"));
+                evalEcharts.setOption(option);
+            });
         },
         backToTop() {
             document.documentElement.scrollTop = 0;
