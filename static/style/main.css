@@ -235,6 +235,40 @@
     white-space: nowrap;
 }
 
+/* 图片遮罩处理页面 */
+.picture-area {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.picture-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.picture {
+    width: 100%;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-focus: none;
+    user-select: none
+}
+
+/*.picture {*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*}*/
+
+.mask-color-panel {
+    height: 26px;
+    background-color: #000;
+    border: 1px solid #fff;
+    display: inline-block;
+    cursor: pointer;
+}
+
 .ml-10 {
     margin-left: 10px !important;
 }
@@ -261,6 +295,14 @@
 
 .mr-100 {
     margin-right: 100px !important;
+}
+
+.wd-50 {
+    width: 50px !important;
+}
+
+.wd-80 {
+    width: 80px !important;
 }
 
 .wd-100 {

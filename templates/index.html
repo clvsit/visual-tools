@@ -5,6 +5,7 @@
     <title>可视化工具箱</title>
     <link href="../static/extern/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="../static/style/index.css" type="text/css" rel="stylesheet">
+    <script src="../static/script/main.js"></script>
 </head>
 <body>
 <div id="app" class="background">
@@ -26,6 +27,10 @@
                     <li @click="panelType=3" class="sidebar-menu-item" :class="{ active: panelType==3 }">
                         <i class="glyphicon glyphicon-bookmark"></i>
                         <span class="ml-5">数据生成</span>
+                    </li>
+                    <li @click="panelType=4" class="sidebar-menu-item" :class="{ active: panelType===4 }">
+                        <i class="glyphicon glyphicon-bookmark"></i>
+                        <span class="ml-5">图片处理</span>
                     </li>
                 </ul>
                 <i class="glyphicon glyphicon-tower sidebar-bottom-logo"></i>
@@ -101,7 +106,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-else-if="panelType == 3">
+                <div v-else-if="panelType === 3">
                     <div class="main-header">
                         <div class="header-box">
                             <div class="header-title">
@@ -126,42 +131,29 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 遮罩层 -->
-    <div class="mask-layer hidden"></div>
-
-    <!-- 弹窗层 -->
-    <div class="popup-layer panel-default hidden"
-         :style="{ width: panel.width + 'px', height: panel.height + 'px', 'margin-left': '-' + panel.marginLeft + 'px', 'margin-top': '-' + panel.marginTop + 'px' }">
-        <div v-if="panelType == 1">
-            <div class="panel-heading">
-                <div class="panel-name h4">添加标签</div>
-                <div class="panel-operator">
-                    <i class="glyphicon glyphicon-remove"></i>
-                </div>
-            </div>
-            <div class="panel-body">
-                <form class="form">
-                    <div class="form-group">
-                        <label class="control-label" for="createLabelName">
-                            *标签名称：1-10个中文汉字
-                        </label>
-                        <input type="text" class="form-control" id="createLabelName"/>
-                        <div class=""></div>
+                <div v-else-if="panelType === 4">
+                    <div class="main-header">
+                        <div class="header-box">
+                            <div class="header-title">
+                                <i class="glyphicon glyphicon-bookmark"></i>
+                                <span class="title ml-10">图像处理</span>
+                            </div>
+                        </div>
+                        <div class="delimiter"></div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label" for="createLabelBrief">标签介绍：1-64个中文汉字</label>
-                        <textarea class="form-control" id="createLabelBrief" rows="5"></textarea>
-                    </div>
-                </form>
-                <div class="delimiter"></div>
-                <div class="panel-operator">
-                    <div class="btn-new-style line-center">
-                        <div class="btn-new-style-circle"></div>
-                        创建
+                    <div class="main-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <img src="/static/images/pic_picture_1.png" alt="图片遮罩处理">
+                                    <div class="caption">
+                                        <h4>图片遮罩处理</h4>
+                                        <p>使用遮罩块对图片指定区域进行遮罩</p>
+                                        <p class="text-right"><a @click="linkTo('picture/mask')" class="btn btn-default" role="button">进入</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
