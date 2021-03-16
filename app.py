@@ -56,6 +56,11 @@ def picture_mask():
     return render_template("picture/picture_mask.html")
 
 
+@app.route("/other/euler_script_generate")
+def euler_script_generate():
+    return render_template("other/euler_script_generate.html")
+
+
 @app.route('/open')
 def open_dataset() -> dict:
     """
@@ -240,6 +245,25 @@ def data_generate():
                 "output": output_list[0]
             }
         }
+    else:
+        feedback = {"code": 0, "msg": "请求方法有误！", "data": {}}
+    return feedback
+
+
+@app.route("/other/code/output", methods=["POST"])
+def output_code():
+    if request.method == "POST":
+        file_name = request.form.get("fileName", "")
+        code = request.form.get("code", "")
+        file_path = "static/source/code/" + file_name
+
+        try:
+            print("/nfs/users/chenxu/project/visual_tools/" + file_path)
+            with open("/nfs/users/chenxu/project/visual_tools/" + file_path, "w", encoding="utf-8") as file:
+                file.write(code)
+            feedback = {"code": 1, "msg": "导出代码成功！", "data": {"file": file_path}}
+        except Exception as error:
+            feedback = {"code": 0, "msg": "导出代码失败！", "data": {"msg": str(error)}}
     else:
         feedback = {"code": 0, "msg": "请求方法有误！", "data": {}}
     return feedback

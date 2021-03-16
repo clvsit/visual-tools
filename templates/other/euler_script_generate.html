@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欧拉模型脚本</title>
+    <link href="../../static/extern/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/default.min.css" type="text/css" rel="stylesheet">
+    <link href="../../static/extern/upload/style.css" type="text/css" rel="stylesheet">
+    <link href="../../static/style/main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="app" class="background">
+    <nav class="navbar navbar-default navbar-fixed-top"></nav>
+
+    <div class="container-fluid mt-20">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-container euler-script-generate">
+                    <h3>配置区域</h3>
+                    <hr/>
+                    <form class="form">
+                        <div class="form-block">
+                            <h4>模型基础信息</h4>
+                            <div class="form-group ml-10 mt-20">
+                                <label class="control-label"><span class="color-red">★</span>文件名称：</label>
+                                <input v-model="extension.basic.fileName" type="text" class="form-control"/>
+                            </div>
+                            <div class="form-group ml-10">
+                                <label class="control-label"><span class="color-red">★</span>模型类名：</label>
+                                <input v-model="extension.basic.className" type="text" class="form-control"/>
+                            </div>
+                            <div class="form-group ml-10 mt-20">
+                                <div @click="addCode(0)" class="center-block btn btn-success wd-100">修改</div>
+                            </div>
+                            <hr/>
+                        </div>
+                        <transition name="fade">
+                            <div v-if="extension.dingding.isShow" class="form-block">
+                                <h4>
+                                    扩充功能：钉钉报警
+                                    <span class="float-right mr-5">
+                                        <i @click="removeExtension('1')" class="glyphicon glyphicon-remove"></i>
+                                    </span>
+                                </h4>
+                                <div class="form-group ml-10 mt-20">
+                                    <label class="control-label"><span class="color-red">★</span>报警地址：</label>
+                                    <input v-model="extension.dingding.url" type="text" class="form-control"/>
+                                </div>
+                                <div class="form-group ml-10 mt-20">
+                                    <label class="control-label"><span class="color-red">★</span>消息标题：</label>
+                                    <input v-model="extension.dingding.title" type="text" class="form-control"/>
+                                </div>
+                                <div class="form-group ml-10 mt-20">
+                                    <div @click="addCode(1)" class="center-block btn btn-success wd-100">添加</div>
+                                </div>
+                                <hr/>
+                            </div>
+                        </transition>
+                        <transition name="fade">
+                            <div v-if="extension.config.isShow" class="form-block">
+                                <h4>
+                                    扩充功能：ConfigCenter 配置文件加载
+                                    <span class="float-right mr-5">
+                                        <i @click="removeExtension('2')" class="glyphicon glyphicon-remove"></i>
+                                    </span>
+                                </h4>
+                                <div class="form-group ml-10 mt-20">
+                                    <label class="control-label"><span class="color-red">★</span>namespace：</label>
+                                    <input v-model="extension.config.namespace" type="text" class="form-control"/>
+                                </div>
+                                <div class="form-group ml-10 mt-20">
+                                    <label class="control-label"><span class="color-red">★</span>配置文件路径：</label>
+                                    <input v-model="extension.config.url" type="text" class="form-control"/>
+                                </div>
+                                <div class="form-group ml-10 mt-20">
+                                    <div @click="addCode(2)" class="center-block btn btn-success wd-100">添加</div>
+                                </div>
+                                <hr/>
+                            </div>
+                        </transition>
+                        <div class="form-block">
+                            <h4>扩充功能添加</h4>
+                            <div @click="addExtension" class="extension-list">
+                                <div v-for="item in extension.list">
+                                    <div v-if="item.isShow" class="label" :class="item.class" :data-extension-type="item.type" v-text="item.text"></div>
+                                </div>
+                            </div>
+                            <hr/>
+                        </div>
+                        <div class="form-block">
+                            <h4>工具栏</h4>
+                            <div class="form-group ml-10 mt-20">
+                                <div @click="request('output')" class="btn btn-primary">代码导出</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="content" class="col-md-6">
+                <div class="input-container">
+                    <h3>代码展示</h3>
+                    <hr/>
+                    <pre><code class="python" v-text="codeView"></code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="open" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">消息框</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="upload" method="post" action="upload.php" enctype="multipart/form-data">
+                        <div id="drop">
+                            Drop Here
+                            <a>Browse</a>
+                            <input type="file" name="upl" multiple/>
+                        </div>
+                        <ul></ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="../../static/script/jquery.min.js"></script>
+<script src="../../static/extern/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="../../static/script/vue.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script>
+<script src="../../static/script/euler_script_generate.js"></script>
+</body>
+</html>

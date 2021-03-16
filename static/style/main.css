@@ -269,6 +269,38 @@
     cursor: pointer;
 }
 
+/* 欧拉模型脚本 */
+.form-block {
+    margin: 20px 0;
+}
+
+.euler-script-generate {
+    cursor: default;
+}
+
+.euler-script-generate .glyphicon-remove {
+    cursor: pointer;
+}
+
+.euler-script-generate .extension-list {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0 0 10px;
+}
+
+.euler-script-generate .extension-list .label {
+    padding: 10px;
+    cursor: pointer;
+    margin-right: 20px;
+    transition: all 0.5s ease-in-out;
+}
+
+.euler-script-generate .extension-list .label:hover {
+    box-shadow: 0 2px 3px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* 通用样式设置 */
+
 .ml-10 {
     margin-left: 10px !important;
 }
@@ -331,4 +363,8 @@
 
 .white-space {
     height: 200px;
+}
+
+.color-red {
+    color: #f00;
 }

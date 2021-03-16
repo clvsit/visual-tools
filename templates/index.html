@@ -32,6 +32,10 @@
                         <i class="glyphicon glyphicon-picture"></i>
                         <span class="ml-5">图片处理</span>
                     </li>
+                    <li @click="panelType=5" class="sidebar-menu-item" :class="{ active: panelType===5 }">
+                        <i class="glyphicon glyphicon-asterisk"></i>
+                        <span class="ml-5">其他工具</span>
+                    </li>
                 </ul>
                 <i class="glyphicon glyphicon-tower sidebar-bottom-logo"></i>
             </div>
@@ -150,6 +154,31 @@
                                         <h4>图片遮罩处理</h4>
                                         <p>使用遮罩块对图片指定区域进行遮罩</p>
                                         <p class="text-right"><a @click="linkTo('picture/mask')" class="btn btn-default" role="button">进入</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else-if="panelType === 5">
+                    <div class="main-header">
+                        <div class="header-box">
+                            <div class="header-title">
+                                <i class="glyphicon glyphicon-asterisk"></i>
+                                <span class="title ml-10">其他工具</span>
+                            </div>
+                        </div>
+                        <div class="delimiter"></div>
+                    </div>
+                    <div class="main-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <img src="/static/images/pic_picture_1.png" alt="欧拉模型脚本">
+                                    <div class="caption">
+                                        <h4>欧拉模型脚本</h4>
+                                        <p>快速生成欧拉模型通用脚本</p>
+                                        <p class="text-right"><a @click="linkTo('other/euler_script_generate')" class="btn btn-default" role="button">进入</a></p>
                                     </div>
                                 </div>
                             </div>
