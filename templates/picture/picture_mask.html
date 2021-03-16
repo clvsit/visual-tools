@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片遮罩处理</title>
+    <link href="../../static/extern/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="../../static/extern/upload/style.css" type="text/css" rel="stylesheet">
+    <link href="../../static/style/main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="app" class="background">
+    <nav class="navbar navbar-default navbar-fixed-top"></nav>
+
+    <div class="container-fluid mt-20">
+        <div class="row">
+            <div class="col-md-8">
+                <div id="content" class="input-container">
+                    <h3>
+                        <span>图片区域</span>
+                        <span class="float-right">
+                            <input id="pictureFile" type="file" class="sr-only"/>
+                            <button @click="openPicture" class="btn btn-default">上传图片</button>
+                        </span>
+                    </h3>
+                    <hr/>
+                    <div id="pictureArea"
+                         class="picture-area"
+                         @mousedown="startMoveMask"
+                         @mousemove="moveMask"
+                         @mouseup="mask.isMove=false">
+                        <img id="picture" class="picture" src="#" :src="picture.url" alt="待遮罩图片"/>
+                        <div id="mask"
+                             class="picture-mask"
+                             :style="{'width': validWidth + 'px', 'height': validHeight + 'px', 'background-color': mask.color, 'top': mask.y + 'px', 'left': mask.x + 'px'}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="content-list">
+                    <h3>设置区域</h3>
+                    <hr/>
+                    <form class="form-inline">
+                        <h4>图片信息</h4>
+                        <hr/>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span>原始图片：</span>
+                                <div class="form-group">
+                                    <label class="control-label mr-20">
+                                        <span>宽度：</span>
+                                        <input :value="picture.sourceWidth" type="number" class="form-control wd-80" min="0"
+                                               disabled/>
+                                    </label>
+                                    <label class="control-label mr-20">
+                                        <span>高度：</span>
+                                        <input :value="picture.sourceHeight" type="number" class="form-control wd-80" min="0"
+                                               disabled/>
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <span>显示图片：</span>
+                                <div class="form-group">
+                                    <label class="control-label mr-20">
+                                        <span>宽度：</span>
+                                        <input :value="picture.width" type="number" class="form-control wd-80" min="0"
+                                               disabled/>
+                                    </label>
+                                    <label class="control-label mr-20">
+                                        <span>高度：</span>
+                                        <input :value="picture.height" type="number" class="form-control wd-80" min="0"
+                                               disabled/>
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <span>其他信息：</span>
+                                <div class="form-group">
+                                    <label class="control-label mr-20">
+                                        <span>缩放率：</span>
+                                        <span v-text="pictureScaleRatio"></span>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <h4 class="mt-20">遮罩块设置</h4>
+                        <hr/>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span>原始遮罩：</span>
+                                <div class="form-group">
+                                    <label class="control-label mr-20">
+                                        <span>宽度：</span>
+                                        <input v-model="mask.width" type="number" class="form-control wd-80" min="0"/>
+                                    </label>
+                                    <label class="control-label mr-20">
+                                        <span>高度：</span>
+                                        <input v-model="mask.height" type="number" class="form-control wd-80" min="0"/>
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <span>显示遮罩：</span>
+                                <div class="form-group">
+                                    <label class="control-label mr-20">
+                                        <span>宽度：</span>
+                                        <input v-model="mask.view.width" type="number" class="form-control wd-80" min="0" disabled/>
+                                    </label>
+                                    <label class="control-label mr-20">
+                                        <span>高度：</span>
+                                        <input v-model="mask.view.height" type="number" class="form-control wd-80" min="0" disabled/>
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="form-group">
+                                    <label class="control-label mr-20">
+                                        <span>X 轴：</span>
+                                        <input @change="check('x')" v-model="mask.x" type="number"
+                                               class="form-control wd-80"
+                                               min="0"/>
+                                    </label>
+                                    <label class="control-label mr-20">
+                                        <span>Y 轴：</span>
+                                        <input @change="check('y')" v-model="mask.y" type="number"
+                                               class="form-control wd-80"
+                                               min="0"/>
+                                    </label>
+                                    <label class="control-label">
+                                        <span>颜色：</span>
+                                        <div id="colorPicker" class="mask-color-panel form-control"></div>
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="form-group">
+                                    <label class="control-label mr-20">
+                                        <span>真实 X 轴：</span>
+                                        <input :value="maskScaledX" type="number" class="form-control wd-80" min="0" disabled/>
+                                    </label>
+                                    <label class="control-label mr-20">
+                                        <span>真实 Y 轴：</span>
+                                        <input :value="maskScaledY" type="number" class="form-control wd-80" min="0" disabled/>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="open" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">消息框</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="upload" method="post" action="upload.php" enctype="multipart/form-data">
+                        <div id="drop">
+                            Drop Here
+                            <a>Browse</a>
+                            <input type="file" name="upl" multiple/>
+                        </div>
+                        <ul></ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="../../static/script/jquery.min.js"></script>
+<script src="../../static/extern/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="../../static/script/vue.js"></script>
+<script src="../../static/script/paigusu.min.js"></script>
+<script src="../../static/script/picture_mask.js"></script>
+</body>
+</html>

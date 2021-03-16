@@ -10,6 +10,8 @@ from data_generate import DataGenerator
 
 
 app = Flask(__name__)
+app.jinja_env.auto_reload = True
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 CORS(app, resources=r'/*')
 
 
@@ -47,6 +49,11 @@ def generate():
 @app.route("/classify/view")
 def classify_view():
     return render_template("classify/view.html")
+
+
+@app.route("/picture/mask")
+def picture_mask():
+    return render_template("picture/picture_mask.html")
 
 
 @app.route('/open')
