@@ -2,7 +2,7 @@ new Vue({
     el: "#app",
     data: {
         input: {
-            filename: "version_1/output/compare_version.jsonl",
+            filename: "/nfs/users/chenxu/project/OpenNMT-tf/asr_correct/result/correct/redbook/compare_online_label.jsonl",
             start: 0,
             limit: 10,
             total: 0,

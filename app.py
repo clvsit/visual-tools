@@ -1,11 +1,12 @@
 import os
 import json
+import pickle
 import jsonlines
 from uuid import uuid4
 from flask import Flask, render_template, request
 from flask_cors import CORS
 from sequence_handler import SequenceHandler
-# from data_generate import DataGenerator
+from data_generate import DataGenerator
 
 
 app = Flask(__name__)
@@ -14,8 +15,8 @@ CORS(app, resources=r'/*')
 
 dataset_dict = {}
 
-# with open("/nfs/users/chenxu/project/OpenNMT-tf/asr_correct/data/word_sim_dict.json", "r", encoding="utf-8") as file:
-#     data_generator = DataGenerator(json.load(file))
+with open("/nfs/users/chenxu/project/OpenNMT-tf/asr_correct/data/word_sim_dict.pkl", "rb") as file:
+    data_generator = DataGenerator(pickle.load(file))
 
 
 @app.route('/')
