@@ -17,8 +17,8 @@ CORS(app, resources=r'/*')
 
 dataset_dict = {}
 
-with open("/nfs/users/chenxu/project/OpenNMT-tf/asr_correct/data/word_sim_dict.pkl", "rb") as file:
-    data_generator = DataGenerator(pickle.load(file))
+# with open("/nfs/users/chenxu/project/OpenNMT-tf/asr_correct/data/word_sim_dict.pkl", "rb") as file:
+#     data_generator = DataGenerator(pickle.load(file))
 
 
 @app.route('/')

@@ -78,6 +78,20 @@
                                 <hr/>
                             </div>
                         </transition>
+                        <transition name="fade">
+                            <div v-if="extension.paraCheck.isShow" class="form-block">
+                                <h4>
+                                    扩充功能：函数参数检查
+                                    <span class="float-right mr-5">
+                                        <i @click="removeExtension('3')" class="glyphicon glyphicon-remove"></i>
+                                    </span>
+                                </h4>
+                                <div class="form-group ml-10 mt-20">
+                                    <div @click="addCode(3)" class="center-block btn btn-success wd-100">添加</div>
+                                </div>
+                                <hr/>
+                            </div>
+                        </transition>
                         <div class="form-block">
                             <h4>扩充功能添加</h4>
                             <div @click="addExtension" class="extension-list">

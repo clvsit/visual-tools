@@ -14,7 +14,8 @@ new Vue({
         extension: {
             list: [
                 {type: 1, class: "label-danger", text: "钉钉报警", isShow: true},
-                {type: 2, class: "label-info", text: "ConfigCenter 配置文件加载", isShow: true}
+                {type: 2, class: "label-info", text: "ConfigCenter 配置文件加载", isShow: true},
+                {type: 3, class: "label-warning", text: "函数参数检查", isShow: true}
             ],
             basic: {
                 fileName: "test.py",
@@ -29,6 +30,9 @@ new Vue({
                 isShow: false,
                 namespace: "dev",
                 url: ""
+            },
+            paraCheck: {
+                isShow: false,
             }
         },
         requestUrl: ""
@@ -120,12 +124,19 @@ new Vue({
                     isShow: true
                 };
             }
+            // 添加函数参数检查
+            else if (type === 3) {
+                this.extension.list[type - 1].isShow = false;
+                this.extension.paraCheck = {
+                    isShow: true
+                };
+            }
         },
         removeExtension(extensionType) {
             const type = Number(extensionType);
 
+            this.extension.list[type - 1].isShow = true;
             if (type === 1) {
-                this.extension.list[type - 1].isShow = true;
                 this.extension.dingding = {
                     isShow: false,
                     title: "报警消息",
@@ -135,7 +146,6 @@ new Vue({
                 this.code.body.dingding = [];
             }
             else if (type === 2) {
-                this.extension.list[type - 1].isShow = true;
                 this.extension.config = {
                     isShow: false,
                     namespace: "dev",
@@ -143,6 +153,13 @@ new Vue({
                 };
                 this.code.header.config = [];
                 this.code.body.config = [];
+            }
+            else if (type === 3) {
+                this.extension.paraCheck = {
+                    isShow: false,
+                };
+                this.code.header.paraCheck = [];
+                this.code.body.paraCheck = [];
             }
             this.makeCode();
         },
@@ -220,12 +237,40 @@ new Vue({
                     "        return configs\n\n"
                 ];
             }
+            else if (type === 3) {
+                this.code.header.paraCheck = [
+                    "from functools import wraps\n" +
+                    "from inspect import signature\n"
+                ];
+                this.code.body.paraCheck = [
+                    "def input_check():\n" +
+                    "    def decorate(func):\n" +
+                    "        # 获取函数注释元信息\n" +
+                    "        annotations = func.__annotations__\n" +
+                    "        sig = signature(func)\n" +
+                    "\n" +
+                    "        @wraps(func)\n" +
+                    "        def wrapper(*args, **kwargs):\n" +
+                    "            # 获取执行函数的参数名与值\n" +
+                    "            param_dict = sig.bind(*args, **kwargs).arguments\n" +
+                    "\n" +
+                    "            for param_name, param_value in param_dict.items():\n" +
+                    "                if type(param_value) != annotations[param_name]:\n" +
+                    "                    raise TypeError(\"The param {} must be {}!\".format(param_name, annotations[param_name]))\n" +
+                    "\n" +
+                    "            return func(*args, **kwargs)\n" +
+                    "\n" +
+                    "        return wrapper\n" +
+                    "\n" +
+                    "    return decorate\n\n\n"
+                ];
+            }
             this.makeCode();
         },
         makeCode() {
             let code = "",
                 operationList = [
-                    "basic", "dingding", "config"
+                    "paraCheck", "basic", "dingding", "config"
                 ];
 
             // 添加头部引用
