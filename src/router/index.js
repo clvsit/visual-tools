@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import IndexView from "../views/Index.vue"
 import VideoCompareView from "../views/view_video/VideoCompare.vue"
+import PictureMaskView from "../views/view_picture/PictureMask.vue"
 
 const routes = [
   {
@@ -12,6 +13,11 @@ const routes = [
     path: '/video/compare',
     name: 'VideoCompare',
     component: VideoCompareView
+  },
+  {
+    path: '/picture/mask',
+    name: 'PictureMask',
+    component: PictureMaskView
   },
   // {
     // path: '/about',
