@@ -43,21 +43,37 @@ export default {
             type: String,
             required: true
         },
-        height: {
-            type: Number,
-            required: true
-        }
+        height: {}
     },
     data() {
         return {
             path: "",
+            videoDom: null
         }
+    },
+    created() {
+        let _this = this;
+
+        this.$nextTick(() => {
+            _this.videoDom = document.getElementById("videoDom");
+        });
     },
     methods: {
         getVideo() {
+            this.videoDom.src = this.path;
+        },
+        play() {
+            this.videoDom.play();
+        },
+        stop() {
+            this.videoDom.pause();
+        },
+        setSpeed(speed) {
+            this.videoDom.playbackRate = Number(speed);
+        },
+        setTime(time) {
             const videoDom = document.getElementById("videoDom");
-
-            videoDom.src = this.path;
+            videoDom.currentTime = time;
         }
     }
 }

@@ -119,7 +119,7 @@
                       <div class="swiper-item-footer">
                         <p class="text-right">
                           <a
-                            @click="linkTo('video/video_compare')"
+                            @click="linkTo('video/compare')"
                             class="btn btn-default"
                             role="button"
                             >进入</a

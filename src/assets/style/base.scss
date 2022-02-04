@@ -7,9 +7,13 @@
     background: require("../assets/images/back.jpg") center center repeat;
 }
 
+.container-fluid {
+  position: relative;
+  top: 90px;
+}
+
 .input-container {
     width: 100%;
-    height: auto;
     padding: 20px;
     box-shadow: 0 3px 2px 3px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
@@ -74,4 +78,29 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.no-border {
+  border: none;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.no-padding-horizontal {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.display-inline {
+  display: inline;
+}
+
+// 排版样式
+
+.flex-space-between {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
