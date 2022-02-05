@@ -11,6 +11,11 @@ module.exports = {
 				jQuery: 'jquery',
 				'window.jQuery': 'jquery',
 				Popper: ['popper.js', 'default']
+			}),
+			new webpack.DefinePlugin({
+				'process.env': {
+					NODE_ENV:'"development"'
+				}
 			})
 		]
 	}

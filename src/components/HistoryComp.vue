@@ -51,13 +51,16 @@
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/style/base.scss";
+
+
 .history-list {
   max-height: 500px;
   overflow: auto;
+}
 
-  ::-webkit-scrollbar {
-    width: 4px;
-  }
+.history-list ::-webkit-scrollbar {
+  width: 4px;
 }
 
 .history-list::-webkit-scrollbar-thumb {

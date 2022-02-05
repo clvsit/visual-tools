@@ -36,8 +36,8 @@
               class="sidebar-menu-item"
               :class="{ active: panelType === 3 }"
             >
-              <i class="glyphicon glyphicon-asterisk"></i>
-              <span class="ml-5">其他工具</span>
+              <i class="glyphicon glyphicon-file"></i>
+              <span class="ml-5">文件处理</span>
             </li>
             <li
               @click="panelType = 4"
@@ -137,8 +137,8 @@
             <div class="main-header">
               <div class="header-box">
                 <div class="header-title">
-                  <i class="glyphicon glyphicon-asterisk"></i>
-                  <span class="title ml-10">其他工具</span>
+                  <i class="glyphicon glyphicon-file"></i>
+                  <span class="title ml-10">文件处理</span>
                 </div>
               </div>
               <div class="delimiter"></div>
@@ -161,7 +161,7 @@
                       <div class="swiper-item-footer">
                         <p class="text-right">
                           <a
-                            @click="linkTo('other/compare')"
+                            @click="linkTo('file/compare')"
                             class="btn btn-default"
                             role="button"
                             >进入</a
