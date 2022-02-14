@@ -15,8 +15,13 @@
                         </div>
                         <hr/>
                         <div class="answer-area">
-                            <div class="btn btn-default">评估</div>
-                            <div class="answer-content" v-text="file.item.answer"></div>
+                            <div v-if="setting.isViewAnswer === false"></div>
+                            <div v-else class="answer-content">
+                                <div class="">
+                                    <b>答案：</b>
+                                    <span v-text="file.item.answer"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="input-area">
@@ -61,16 +66,31 @@
                             </div>
                             <div v-else></div>
                         </div>
-                        <div class="input-footer">
-                            <i class="glyphicon glyphicon-thumbs-up glyphicon-select"></i>
-                            <i class="glyphicon glyphicon-thumbs-down"></i>
-                        </div>
+                        <div class="input-footer"></div>
                     </div>
 
                 </div>
             </div>
         </div>
         
+    </div>
+
+    <div class="container-func">
+        <div class="navbar-form">
+            <div class="form-group ml-10 mr-20">
+                <label class="control-label mr-5">
+                    <i class="glyphicon glyphicon-ok mr-5"></i>
+                    <span v-text="judge.trueCount"></span>
+                </label>
+                <label class="control-label mr-5">
+                    <i class="glyphicon glyphicon-remove mr-5"></i>
+                    <span v-text="judge.falseCount"></span>
+                </label>
+            </div>
+            <div @click="setting.isViewAnswer = true;" class="ml-10 btn btn-default">
+                <i class="glyphicon glyphicon-flash"></i>评估
+            </div>
+        </div>
     </div>
 </template>
 
@@ -92,6 +112,13 @@ export default {
             file: {
                 list: mock_data,
                 item: {}
+            },
+            setting: {
+                isViewAnswer: false
+            },
+            judge: {
+                trueCount: 0,
+                falseCount: 0
             }
         }
     },
@@ -105,6 +132,7 @@ export default {
     methods: {
         selectFile(fileItem) {
             this.file.item = fileItem;
+            this.setting.isViewAnswer = false;
         }
     }
 }
@@ -173,5 +201,20 @@ export default {
             color: #f00;
         }
     }
+}
+
+.container-func {
+    width: 200px;
+    margin-left: -100px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    background-color: #f8f8f8;
+    border-color: #e7e7e7;
+    border-radius: 5px;
+    box-shadow: 0 3px 5px 3px rgba(0, 0, 0, 0.3);
 }
 </style>

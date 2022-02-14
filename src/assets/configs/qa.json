@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Linux 问题1",
+        "desc": "在 Linux 系统中，如何查看用户当前所处的工作目录？",
+        "answer": "调用 pwd 命令",
+        "label": "Linux",
+        "type": "text"
+    },
+    {
+        "name": "Linux 问题2",
+        "desc": "以下哪个命令可以用于切换工作目录？",
+        "option": {
+            "A": "pwd",
+            "B": "cd",
+            "C": "ls",
+            "D": "mv"
+        },
+        "answer": "B",
+        "label": "Linux",
+        "type": "selectSingle"
+    }
+]
